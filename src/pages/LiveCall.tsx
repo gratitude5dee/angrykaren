@@ -90,7 +90,7 @@ export default function LiveCall() {
       // Show score card modal
       // Send summary to Railway webhook
       try {
-        await fetch('https://primary-production-92d2.up.railway.app/webhook-test/store-conversation', {
+        await fetch('https://primary-production-92d2.up.railway.app/webhook/store-conversation', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
