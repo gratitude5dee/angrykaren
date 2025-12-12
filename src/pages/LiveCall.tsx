@@ -96,11 +96,11 @@ export default function LiveCall() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            message: scoring.summary,
+            message: result.transcript,
             user: profile?.username || user?.email || 'anonymous',
           }),
         });
-        console.log('Conversation summary sent to webhook');
+        console.log('Conversation transcript sent to webhook');
       } catch (webhookError) {
         console.error('Failed to send summary to webhook:', webhookError);
       }
