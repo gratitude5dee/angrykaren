@@ -117,7 +117,7 @@ const trainingPersonas = [
   },
   { 
     id: '2', 
-    name: 'Tech-Savvy Senior', 
+    name: 'Angry Karen', 
     creator: '@techsupport', 
     description: 'Elderly customer struggling with new technology setup.', 
     imageUrl: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&h=300&fit=crop', 
