@@ -1,5 +1,6 @@
-import { Plus, BookOpen, Video, BarChart3, Trophy, Search, ChevronDown, Crown, Headphones } from 'lucide-react';
+import { Plus, Users, Target, BarChart3, Trophy, Search, ChevronDown, Crown, Headphones, Home } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { Link, useLocation } from 'react-router-dom';
 import {
   Sidebar,
   SidebarContent,
@@ -25,10 +26,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 const navItems = [
-  { title: 'Training Library', icon: BookOpen, url: '#' },
-  { title: 'Practice Sessions', icon: Video, url: '#' },
-  { title: 'My Progress', icon: BarChart3, url: '#' },
-  { title: 'Leaderboard', icon: Trophy, url: '#' },
+  { title: 'Dashboard', icon: Home, url: '/' },
+  { title: 'Personas', icon: Users, url: '/personas' },
+  { title: 'Scenarios', icon: Target, url: '/scenarios' },
+  { title: 'My Progress', icon: BarChart3, url: '/progress' },
+  { title: 'Leaderboard', icon: Trophy, url: '/leaderboard' },
 ];
 
 const recentSessions = [
@@ -40,8 +42,8 @@ const recentSessions = [
 export function AppSidebar() {
   const { state } = useSidebar();
   const { profile, signOut } = useAuth();
+  const location = useLocation();
   const collapsed = state === 'collapsed';
-
   return (
     <Sidebar className="border-r-0">
       <SidebarHeader className="p-4">
@@ -70,19 +72,25 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    className="text-sidebar-foreground/80 hover:text-sidebar-foreground hover:bg-sidebar-accent"
-                  >
-                    <a href={item.url}>
-                      <item.icon className="h-5 w-5" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {navItems.map((item) => {
+                const isActive = location.pathname === item.url || 
+                  (item.url !== '/' && location.pathname.startsWith(item.url));
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      className={`${isActive 
+                        ? 'bg-sidebar-accent text-sidebar-foreground' 
+                        : 'text-sidebar-foreground/80 hover:text-sidebar-foreground hover:bg-sidebar-accent'}`}
+                    >
+                      <Link to={item.url}>
+                        <item.icon className="h-5 w-5" />
+                        {!collapsed && <span>{item.title}</span>}
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
