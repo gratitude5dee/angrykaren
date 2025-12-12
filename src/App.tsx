@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Personas from "./pages/Personas";
 import PersonaDetail from "./pages/PersonaDetail";
+import LiveCall from "./pages/LiveCall";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/register" element={<Register />} />
             <Route path="/personas" element={<Personas />} />
             <Route path="/persona/:id" element={<PersonaDetail />} />
+            <Route path="/call/:personaId/:scenarioId" element={<LiveCall />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
