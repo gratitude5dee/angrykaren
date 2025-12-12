@@ -186,7 +186,7 @@ export function ScoreCardModal({
           </div>
 
           {/* Strengths */}
-          {scoringResult.strengths.length > 0 && (
+          {(scoringResult.strengths?.length ?? 0) > 0 && (
             <div className="mb-4">
               <h4 className="text-sm font-medium text-foreground mb-2">Strengths</h4>
               <div className="space-y-2">
@@ -201,7 +201,7 @@ export function ScoreCardModal({
           )}
 
           {/* Improvements */}
-          {scoringResult.improvements.length > 0 && (
+          {(scoringResult.improvements?.length ?? 0) > 0 && (
             <div className="mb-6">
               <h4 className="text-sm font-medium text-foreground mb-2">Areas for Improvement</h4>
               <div className="space-y-2">
