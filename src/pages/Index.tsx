@@ -233,6 +233,16 @@ const Index = () => {
   };
 
   const handlePersonaClick = (persona: typeof trainingPersonas[0]) => {
+    // Special case for Angry Karen - use FaceTime iframe embed
+    if (persona.id === '2') {
+      navigate(`/facetime/${persona.id}`, {
+        state: {
+          personaName: persona.name,
+        },
+      });
+      return;
+    }
+    
     navigate(`/call/${persona.id}/default`, {
       state: {
         personaName: persona.name,
