@@ -6,16 +6,23 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
 interface ScoringResult {
-  overallScore: number;
-  categoryScores: {
+  // API returns these
+  percentage?: number;
+  overallScore?: number;
+  categories?: Record<string, { score: number; feedback: string }>;
+  categoryScores?: {
     category: string;
     score: number;
     maxScore: number;
     feedback: string;
   }[];
-  strengths: string[];
-  improvements: string[];
+  keyStrengths?: string[];
+  strengths?: string[];
+  areasForImprovement?: string[];
+  improvements?: string[];
   summary: string;
+  totalScore?: number;
+  maxPossibleScore?: number;
 }
 
 interface ScoreCardModalProps {
@@ -63,10 +70,28 @@ export function ScoreCardModal({
   const navigate = useNavigate();
   const [animatedScore, setAnimatedScore] = useState(0);
   
-  const score = scoringResult?.overallScore ?? 0;
+  // Handle both API formats: percentage/overallScore and categories/categoryScores
+  const score = scoringResult?.percentage ?? scoringResult?.overallScore ?? 0;
   const grade = getGrade(score);
-  const totalPoints = scoringResult?.categoryScores?.reduce((acc, c) => acc + c.maxScore, 0) ?? 30;
-  const earnedPoints = scoringResult?.categoryScores?.reduce((acc, c) => acc + c.score, 0) ?? 0;
+  
+  // Map categories object to categoryScores array if needed
+  const categoryScores = scoringResult?.categoryScores ?? (
+    scoringResult?.categories 
+      ? Object.entries(scoringResult.categories).map(([category, data]) => ({
+          category,
+          score: data.score,
+          maxScore: 5,
+          feedback: data.feedback,
+        }))
+      : []
+  );
+  
+  const totalPoints = scoringResult?.maxPossibleScore ?? (categoryScores.reduce((acc, c) => acc + c.maxScore, 0) || 30);
+  const earnedPoints = scoringResult?.totalScore ?? (categoryScores.reduce((acc, c) => acc + c.score, 0) || 0);
+  
+  // Handle both API formats for strengths/improvements
+  const strengths = scoringResult?.keyStrengths ?? scoringResult?.strengths ?? [];
+  const improvements = scoringResult?.areasForImprovement ?? scoringResult?.improvements ?? [];
 
   useEffect(() => {
     if (!isOpen || !scoringResult) return;
@@ -186,11 +211,11 @@ export function ScoreCardModal({
           </div>
 
           {/* Strengths */}
-          {(scoringResult.strengths?.length ?? 0) > 0 && (
+          {strengths.length > 0 && (
             <div className="mb-4">
               <h4 className="text-sm font-medium text-foreground mb-2">Strengths</h4>
               <div className="space-y-2">
-                {scoringResult.strengths.slice(0, 3).map((strength, i) => (
+                {strengths.slice(0, 3).map((strength, i) => (
                   <div key={i} className="flex items-start gap-2 text-sm">
                     <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
                     <span className="text-muted-foreground">{strength}</span>
@@ -201,11 +226,11 @@ export function ScoreCardModal({
           )}
 
           {/* Improvements */}
-          {(scoringResult.improvements?.length ?? 0) > 0 && (
+          {improvements.length > 0 && (
             <div className="mb-6">
               <h4 className="text-sm font-medium text-foreground mb-2">Areas for Improvement</h4>
               <div className="space-y-2">
-                {scoringResult.improvements.slice(0, 2).map((improvement, i) => (
+                {improvements.slice(0, 2).map((improvement, i) => (
                   <div key={i} className="flex items-start gap-2 text-sm">
                     <ArrowUpRight className="h-4 w-4 text-orange-500 mt-0.5 shrink-0" />
                     <span className="text-muted-foreground">{improvement}</span>
