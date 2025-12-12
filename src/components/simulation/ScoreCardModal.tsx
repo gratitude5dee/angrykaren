@@ -65,8 +65,8 @@ export function ScoreCardModal({
   
   const score = scoringResult?.overallScore ?? 0;
   const grade = getGrade(score);
-  const totalPoints = scoringResult?.categoryScores.reduce((acc, c) => acc + c.maxScore, 0) ?? 30;
-  const earnedPoints = scoringResult?.categoryScores.reduce((acc, c) => acc + c.score, 0) ?? 0;
+  const totalPoints = scoringResult?.categoryScores?.reduce((acc, c) => acc + c.maxScore, 0) ?? 30;
+  const earnedPoints = scoringResult?.categoryScores?.reduce((acc, c) => acc + c.score, 0) ?? 0;
 
   useEffect(() => {
     if (!isOpen || !scoringResult) return;
