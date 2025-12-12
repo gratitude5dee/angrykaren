@@ -1,1 +1,7 @@
 project_id = "kioschhlyrtzsqoqtdda"
+
+[functions.training-config]
+verify_jwt = false
+
+[functions.score-session]
+verify_jwt = false
