@@ -23,7 +23,7 @@ const Login = () => {
       </div>;
   }
   if (user) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

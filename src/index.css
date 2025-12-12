@@ -49,6 +49,11 @@
     --gradient-blue: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
     --gradient-green: linear-gradient(180deg, #11998e 0%, #38ef7d 100%);
     --gradient-orange: linear-gradient(180deg, #f093fb 0%, #f5576c 100%);
+
+    /* Landing page */
+    --landing-bg: 263 30% 8%;
+    --landing-glow: 263 100% 70%;
+    --landing-cyan: 195 100% 50%;
   }
 
   .dark {

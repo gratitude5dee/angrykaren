@@ -8,7 +8,7 @@ export default function FaceTimeCall() {
   const personaName = location.state?.personaName || "Angry Karen";
 
   const handleEndCall = () => {
-    navigate("/");
+    navigate("/dashboard");
   };
 
   return (
