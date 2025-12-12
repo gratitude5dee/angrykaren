@@ -2,6 +2,7 @@ import { Headphones } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 interface CharacterCardProps {
+  id: string;
   name: string;
   creator: string;
   description: string;
@@ -9,6 +10,7 @@ interface CharacterCardProps {
   sessionsCompleted: string;
   difficulty: 'Easy' | 'Medium' | 'Hard';
   category: string;
+  onClick?: () => void;
 }
 
 const difficultyColors = {
@@ -18,6 +20,7 @@ const difficultyColors = {
 };
 
 const CharacterCard: React.FC<CharacterCardProps> = ({
+  id,
   name,
   creator,
   description,
@@ -25,9 +28,13 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
   sessionsCompleted,
   difficulty,
   category,
+  onClick,
 }) => {
   return (
-    <div className="min-w-[180px] w-[180px] bg-card rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1 cursor-pointer overflow-hidden group">
+    <div 
+      onClick={onClick}
+      className="min-w-[180px] w-[180px] bg-card rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1 cursor-pointer overflow-hidden group"
+    >
       <div className="h-[140px] overflow-hidden relative">
         <img
           src={imageUrl}

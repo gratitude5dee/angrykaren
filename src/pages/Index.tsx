@@ -225,12 +225,21 @@ const Index = () => {
   const navigate = useNavigate();
 
   const handleContinueLearning = () => {
-    // Navigate to current module or learning path
     navigate('/scenarios');
   };
 
   const handleViewSession = (sessionId: string) => {
     navigate(`/simulation/${sessionId}/debrief`);
+  };
+
+  const handlePersonaClick = (persona: typeof trainingPersonas[0]) => {
+    navigate(`/call/${persona.id}/default`, {
+      state: {
+        personaName: persona.name,
+        scenarioTitle: `${persona.category} Training`,
+        difficulty: persona.difficulty.toLowerCase(),
+      },
+    });
   };
 
   return (
@@ -242,6 +251,7 @@ const Index = () => {
             {trainingPersonas.map((persona) => (
               <CharacterCard
                 key={persona.id}
+                id={persona.id}
                 name={persona.name}
                 creator={persona.creator}
                 description={persona.description}
@@ -249,6 +259,7 @@ const Index = () => {
                 sessionsCompleted={persona.sessionsCompleted}
                 difficulty={persona.difficulty}
                 category={persona.category}
+                onClick={() => handlePersonaClick(persona)}
               />
             ))}
           </HorizontalScrollSection>
