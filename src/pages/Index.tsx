@@ -237,28 +237,6 @@ const Index = () => {
     <ProtectedRoute>
       <DashboardLayout>
         <div className="space-y-6">
-          {/* Learning Path & Stats */}
-          <div className="grid gap-6 lg:grid-cols-3">
-            <div className="lg:col-span-1">
-              <LearningPathCard 
-                path={mockLearningPath} 
-                onContinue={handleContinueLearning} 
-              />
-            </div>
-            <div className="lg:col-span-2">
-              <StatsCards stats={mockStats} />
-            </div>
-          </div>
-
-          {/* Recommended Practice */}
-          <RecommendedPractice scenarios={mockRecommendedScenarios} />
-
-          {/* Recent Sessions */}
-          <RecentSessionsList 
-            sessions={mockRecentSessions} 
-            onViewSession={handleViewSession} 
-          />
-
           {/* Customer Personas */}
           <HorizontalScrollSection title="Customer Personas">
             {trainingPersonas.map((persona) => (
@@ -290,6 +268,28 @@ const Index = () => {
               />
             ))}
           </HorizontalScrollSection>
+
+          {/* Learning Path & Stats */}
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div className="lg:col-span-1">
+              <LearningPathCard 
+                path={mockLearningPath} 
+                onContinue={handleContinueLearning} 
+              />
+            </div>
+            <div className="lg:col-span-2">
+              <StatsCards stats={mockStats} />
+            </div>
+          </div>
+
+          {/* Recommended Practice */}
+          <RecommendedPractice scenarios={mockRecommendedScenarios} />
+
+          {/* Recent Sessions */}
+          <RecentSessionsList 
+            sessions={mockRecentSessions} 
+            onViewSession={handleViewSession} 
+          />
         </div>
       </DashboardLayout>
     </ProtectedRoute>
