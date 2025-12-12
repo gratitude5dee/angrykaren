@@ -1,12 +1,28 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 import { useAnamSession } from '@/hooks/useAnamSession';
 import { AnamAvatar } from '@/components/simulation/AnamAvatar';
 import { TranscriptPanel } from '@/components/simulation/TranscriptPanel';
 import { CallControls } from '@/components/simulation/CallControls';
 import { StatusBar } from '@/components/simulation/StatusBar';
 import { VoiceIndicator } from '@/components/simulation/VoiceIndicator';
+import { ScoringOverlay } from '@/components/simulation/ScoringOverlay';
+import { ScoreCardModal } from '@/components/simulation/ScoreCardModal';
+
+interface ScoringResult {
+  overallScore: number;
+  categoryScores: {
+    category: string;
+    score: number;
+    maxScore: number;
+    feedback: string;
+  }[];
+  strengths: string[];
+  improvements: string[];
+  summary: string;
+}
 
 export default function LiveCall() {
   const { personaId, scenarioId } = useParams();
@@ -17,7 +33,14 @@ export default function LiveCall() {
   const scenarioTitle = location.state?.scenarioTitle || 'Training Scenario';
   const difficulty = location.state?.difficulty || 'intermediate';
 
-  const { callState, transcript, startSession, endSession, toggleMute } = useAnamSession({
+  const [isScoring, setIsScoring] = useState(false);
+  const [scoringResult, setScoringResult] = useState<ScoringResult | null>(null);
+  const [showScoreCard, setShowScoreCard] = useState(false);
+  const [finalDuration, setFinalDuration] = useState(0);
+  const [finalTranscript, setFinalTranscript] = useState<any[]>([]);
+  const [finalSession, setFinalSession] = useState<any>(null);
+
+  const { callState, transcript, session, startSession, endSession, toggleMute } = useAnamSession({
     onError: (error) => {
       toast.error(`Session error: ${error.message}`);
     },
@@ -31,17 +54,47 @@ export default function LiveCall() {
 
   const handleEndCall = useCallback(async () => {
     const result = await endSession();
-    navigate(`/debrief/${scenarioId}`, {
-      state: {
-        transcript: result.transcript,
-        duration: result.duration,
-        session: result.session,
-        personaName,
-        scenarioTitle,
-        difficulty,
-      },
-    });
-  }, [endSession, navigate, scenarioId, personaName, scenarioTitle, difficulty]);
+    
+    // Store for use in modal/navigation
+    setFinalDuration(result.duration);
+    setFinalTranscript(result.transcript);
+    setFinalSession(result.session);
+    
+    // Show scoring overlay
+    setIsScoring(true);
+
+    try {
+      const { data: scoring, error } = await supabase.functions.invoke('score-session', {
+        body: {
+          scenarioId,
+          personaId,
+          transcript: result.transcript,
+          duration: result.duration,
+          scenarioTitle,
+          personaName,
+          difficulty,
+        },
+      });
+
+      setIsScoring(false);
+
+      if (error) {
+        console.error('Scoring error:', error);
+        toast.error('Failed to generate scoring');
+        navigate('/dashboard');
+        return;
+      }
+
+      // Show score card modal
+      setScoringResult(scoring);
+      setShowScoreCard(true);
+    } catch (err) {
+      console.error('Scoring failed:', err);
+      setIsScoring(false);
+      toast.error('Failed to analyze session');
+      navigate('/dashboard');
+    }
+  }, [endSession, navigate, scenarioId, personaId, personaName, scenarioTitle, difficulty]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -83,6 +136,25 @@ export default function LiveCall() {
           className="w-96 hidden lg:block"
         />
       </main>
+
+      {/* Scoring Overlay */}
+      <ScoringOverlay isVisible={isScoring} />
+
+      {/* Score Card Modal */}
+      <ScoreCardModal
+        isOpen={showScoreCard}
+        onClose={() => setShowScoreCard(false)}
+        scoringResult={scoringResult}
+        duration={finalDuration}
+        transcriptLength={finalTranscript.length}
+        personaId={personaId}
+        scenarioId={scenarioId}
+        personaName={personaName}
+        scenarioTitle={scenarioTitle}
+        difficulty={difficulty}
+        transcript={finalTranscript}
+        session={finalSession}
+      />
     </div>
   );
 }

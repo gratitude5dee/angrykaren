@@ -12,6 +12,7 @@ import Personas from "./pages/Personas";
 import PersonaDetail from "./pages/PersonaDetail";
 import LiveCall from "./pages/LiveCall";
 import FaceTimeCall from "./pages/FaceTimeCall";
+import SessionDebrief from "./pages/SessionDebrief";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
             <Route path="/persona/:id" element={<PersonaDetail />} />
             <Route path="/call/:personaId/:scenarioId" element={<LiveCall />} />
             <Route path="/facetime/:personaId" element={<FaceTimeCall />} />
+            <Route path="/debrief/:scenarioId" element={<SessionDebrief />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
