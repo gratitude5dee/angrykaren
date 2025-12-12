@@ -5,48 +5,45 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { signIn, user, loading } = useAuth();
-  const { toast } = useToast();
-
+  const {
+    signIn,
+    user,
+    loading
+  } = useAuth();
+  const {
+    toast
+  } = useToast();
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-sidebar">
+    return <div className="min-h-screen flex items-center justify-center bg-sidebar">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent"></div>
-      </div>
-    );
+      </div>;
   }
-
   if (user) {
     return <Navigate to="/" replace />;
   }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
-    const { error } = await signIn(email, password);
-
+    const {
+      error
+    } = await signIn(email, password);
     if (error) {
       toast({
         title: 'Login failed',
         description: error.message,
-        variant: 'destructive',
+        variant: 'destructive'
       });
     }
-
     setIsLoading(false);
   };
-
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-sidebar p-4">
+  return <div className="min-h-screen flex items-center justify-center bg-sidebar p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-sidebar-foreground mb-2">character.ai</h1>
+          <h1 className="text-3xl font-bold text-sidebar-foreground mb-2">Angry Karen : Agent CSR</h1>
           <p className="text-sidebar-foreground/60">Welcome back! Sign in to continue.</p>
         </div>
 
@@ -54,35 +51,15 @@ const Login = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sidebar-foreground">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="bg-sidebar border-sidebar-border text-sidebar-foreground placeholder:text-sidebar-foreground/40"
-              />
+              <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} required className="bg-sidebar border-sidebar-border text-sidebar-foreground placeholder:text-sidebar-foreground/40" />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="password" className="text-sidebar-foreground">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="bg-sidebar border-sidebar-border text-sidebar-foreground placeholder:text-sidebar-foreground/40"
-              />
+              <Input id="password" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required className="bg-sidebar border-sidebar-border text-sidebar-foreground placeholder:text-sidebar-foreground/40" />
             </div>
 
-            <Button
-              type="submit"
-              className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
-              disabled={isLoading}
-            >
+            <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={isLoading}>
               {isLoading ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>
@@ -97,8 +74,6 @@ const Login = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Login;
