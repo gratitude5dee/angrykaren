@@ -4,6 +4,10 @@
 
 **URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
 
+how we do analysis of the output? - we use n8n and redis
+
+<img width="1417" height="529" alt="image" src="https://github.com/user-attachments/assets/73d5698c-e79c-44ab-9c1c-823f1d42ec3d" />
+
 ## How can I edit this code?
 
 There are several ways of editing your application.
