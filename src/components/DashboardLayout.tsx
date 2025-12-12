@@ -35,7 +35,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
             <div className="relative w-80">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search for Characters"
+                placeholder="Search training scenarios..."
                 className="pl-10 rounded-full border-border bg-card shadow-sm"
               />
             </div>

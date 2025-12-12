@@ -1,4 +1,4 @@
-import { Plus, Compass, Sparkles, Search, MessageCircle, ChevronDown, Crown } from 'lucide-react';
+import { Plus, BookOpen, Video, BarChart3, Trophy, Search, ChevronDown, Crown, Headphones } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import {
   Sidebar,
@@ -25,13 +25,16 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 const navItems = [
-  { title: 'Discover', icon: Compass, url: '#' },
-  { title: 'AvatarFX', icon: Sparkles, url: '#' },
+  { title: 'Training Library', icon: BookOpen, url: '#' },
+  { title: 'Practice Sessions', icon: Video, url: '#' },
+  { title: 'My Progress', icon: BarChart3, url: '#' },
+  { title: 'Leaderboard', icon: Trophy, url: '#' },
 ];
 
-const chatHistory = [
-  { id: '1', name: 'Creative Writing Coach', avatar: '✍️' },
-  { id: '2', name: 'Tech Advisor', avatar: '💻' },
+const recentSessions = [
+  { id: '1', name: 'Angry Customer - Refund', avatar: '😤' },
+  { id: '2', name: 'Tech Support Call', avatar: '💻' },
+  { id: '3', name: 'VIP Escalation', avatar: '⭐' },
 ];
 
 export function AppSidebar() {
@@ -44,20 +47,23 @@ export function AppSidebar() {
       <SidebarHeader className="p-4">
         <div className="flex items-center justify-between">
           {!collapsed && (
-            <span className="text-lg font-semibold text-sidebar-foreground">character.ai</span>
+            <div className="flex items-center gap-2">
+              <Headphones className="h-5 w-5 text-accent" />
+              <span className="text-lg font-semibold text-sidebar-foreground">CSR Training AI</span>
+            </div>
           )}
           <SidebarTrigger className="text-sidebar-foreground/60 hover:text-sidebar-foreground" />
         </div>
       </SidebarHeader>
 
       <SidebarContent className="px-3">
-        {/* Create Button */}
+        {/* New Session Button */}
         <Button
           variant="outline"
           className="w-full justify-start gap-3 mb-4 bg-sidebar-accent border-sidebar-border text-sidebar-foreground hover:bg-sidebar-accent/80"
         >
           <Plus className="h-5 w-5" />
-          {!collapsed && <span>Create</span>}
+          {!collapsed && <span>New Session</span>}
         </Button>
 
         {/* Navigation */}
@@ -86,24 +92,24 @@ export function AppSidebar() {
           <div className="relative my-4">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-sidebar-foreground/40" />
             <Input
-              placeholder="Search"
+              placeholder="Search scenarios..."
               className="pl-9 bg-sidebar-accent border-0 text-sidebar-foreground placeholder:text-sidebar-foreground/40"
             />
           </div>
         )}
 
-        {/* Chat History */}
+        {/* Recent Sessions */}
         <SidebarGroup>
           <SidebarGroupLabel className="text-sidebar-foreground/40 text-xs uppercase tracking-wider">
-            Today
+            Recent Sessions
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {chatHistory.map((chat) => (
-                <SidebarMenuItem key={chat.id}>
+              {recentSessions.map((session) => (
+                <SidebarMenuItem key={session.id}>
                   <SidebarMenuButton className="text-sidebar-foreground/80 hover:text-sidebar-foreground hover:bg-sidebar-accent">
-                    <span className="text-lg">{chat.avatar}</span>
-                    {!collapsed && <span className="truncate">{chat.name}</span>}
+                    <span className="text-lg">{session.avatar}</span>
+                    {!collapsed && <span className="truncate">{session.name}</span>}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -125,7 +131,7 @@ export function AppSidebar() {
           className="w-full justify-center gap-2 border-accent text-accent hover:bg-accent/10"
         >
           <Crown className="h-4 w-4" />
-          {!collapsed && <span>Upgrade</span>}
+          {!collapsed && <span>Go Pro</span>}
         </Button>
 
         {/* User Profile */}
