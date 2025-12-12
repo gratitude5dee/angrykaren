@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useAnamSession } from '@/hooks/useAnamSession';
+import { useAuth } from '@/contexts/AuthContext';
 import { AnamAvatar } from '@/components/simulation/AnamAvatar';
 import { TranscriptPanel } from '@/components/simulation/TranscriptPanel';
 import { CallControls } from '@/components/simulation/CallControls';
@@ -28,6 +29,7 @@ export default function LiveCall() {
   const { personaId, scenarioId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const { profile, user } = useAuth();
   
   const personaName = location.state?.personaName || 'Training Customer';
   const scenarioTitle = location.state?.scenarioTitle || 'Training Scenario';
@@ -86,6 +88,23 @@ export default function LiveCall() {
       }
 
       // Show score card modal
+      // Send summary to Railway webhook
+      try {
+        await fetch('https://primary-production-92d2.up.railway.app/webhook-test/store-conversation', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: scoring.summary,
+            user: profile?.username || user?.email || 'anonymous',
+          }),
+        });
+        console.log('Conversation summary sent to webhook');
+      } catch (webhookError) {
+        console.error('Failed to send summary to webhook:', webhookError);
+      }
+
       setScoringResult(scoring);
       setShowScoreCard(true);
     } catch (err) {
@@ -94,7 +113,7 @@ export default function LiveCall() {
       toast.error('Failed to analyze session');
       navigate('/dashboard');
     }
-  }, [endSession, navigate, scenarioId, personaId, personaName, scenarioTitle, difficulty]);
+  }, [endSession, navigate, scenarioId, personaId, personaName, scenarioTitle, difficulty, profile, user]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
